@@ -23,7 +23,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-10 px-6" style={{ background: 'radial-gradient(ellipse at 30% 0%, #0d0500 0%, #050505 50%)' }}>
+    <div className="min-h-screen pt-20 pb-10 px-6" style={{ background: 'radial-gradient(circle farthest-corner at 10% 20%, rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1%)', backgroundColor: '#eef9fb' }}>
       {/* Dashboard header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -32,13 +32,13 @@ export default function Dashboard() {
         className="max-w-7xl mx-auto mb-8 flex items-end justify-between"
       >
         <div>
-          <div className="font-mono text-xs tracking-widest uppercase mb-1" style={{ color: '#ff6a00', letterSpacing: '0.2em' }}>
+          <div className="font-mono text-xs tracking-widest uppercase mb-1" style={{ color: '#0891b2', letterSpacing: '0.2em' }}>
             Dashboard
           </div>
-          <h1 className="font-display font-bold text-3xl" style={{ color: '#f0ece4', fontFamily: 'Syne' }}>
+          <h1 className="font-display font-bold text-3xl" style={{ color: '#0f1f22', fontFamily: 'Syne' }}>
             Good morning, Arjun
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#555550', fontFamily: 'DM Sans' }}>
+          <p className="text-sm mt-1" style={{ color: '#4a7a82', fontFamily: 'DM Sans' }}>
             AI has queued 6 new recommendations based on your recent activity
           </p>
         </div>
@@ -50,14 +50,14 @@ export default function Dashboard() {
               animate={{ opacity: 1, scale: 1 }}
               onClick={() => setFilterTag(null)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs"
-              style={{ background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', color: '#ff8c42', fontFamily: 'JetBrains Mono' }}
+              style={{ background: 'rgba(8,145,178,0.12)', border: '1px solid rgba(8,145,178,0.3)', color: '#0891b2', fontFamily: 'JetBrains Mono' }}
             >
               #{filterTag} ✕
             </motion.button>
           )}
           <div
             className="px-3 py-1.5 rounded-full text-xs flex items-center gap-2"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#888880', fontFamily: 'DM Sans' }}
+            style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.15)', color: '#4a7a82', fontFamily: 'DM Sans' }}
           >
             <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#4ade80' }} />
             AI Engine Active
@@ -84,10 +84,10 @@ export default function Dashboard() {
                 {/* Section header */}
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="font-display font-semibold text-lg" style={{ color: '#f0ece4', fontFamily: 'Syne' }}>
+                    <h2 className="font-display font-semibold text-lg" style={{ color: '#0f1f22', fontFamily: 'Syne' }}>
                       {filterTag ? `Content tagged #${filterTag}` : 'Top Recommendations'}
                     </h2>
-                    <p className="text-xs mt-0.5" style={{ color: '#555550', fontFamily: 'DM Sans' }}>
+                    <p className="text-xs mt-0.5" style={{ color: '#4a7a82', fontFamily: 'DM Sans' }}>
                       {filtered.length} items · Sorted by AI relevance score
                     </p>
                   </div>
@@ -97,9 +97,9 @@ export default function Dashboard() {
                         key={f}
                         className="px-3 py-1 rounded-lg text-xs transition-all duration-200"
                         style={{
-                          background: 'rgba(255,255,255,0.04)',
-                          border: '1px solid rgba(255,255,255,0.07)',
-                          color: '#555550',
+                          background: 'rgba(8,145,178,0.05)',
+                          border: '1px solid rgba(8,145,178,0.15)',
+                          color: '#4a7a82',
                           fontFamily: 'DM Sans',
                         }}
                       >
@@ -136,20 +136,20 @@ export default function Dashboard() {
                 transition={{ duration: 0.35 }}
               >
                 <div className="mb-5">
-                  <h2 className="font-display font-semibold text-lg" style={{ color: '#f0ece4', fontFamily: 'Syne' }}>
+                  <h2 className="font-display font-semibold text-lg" style={{ color: '#0f1f22', fontFamily: 'Syne' }}>
                     Knowledge Graph
                   </h2>
-                  <p className="text-xs mt-0.5" style={{ color: '#555550', fontFamily: 'DM Sans' }}>
+                  <p className="text-xs mt-0.5" style={{ color: '#4a7a82', fontFamily: 'DM Sans' }}>
                     Interactive 3D map of your topic relationships · Click a node to filter content
                   </p>
                 </div>
                 <div
                   className="rounded-2xl overflow-hidden"
-                  style={{ height: '520px', background: '#080808', border: '1px solid rgba(255,106,0,0.12)' }}
+                  style={{ height: '520px', background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(8,145,178,0.18)' }}
                 >
                   <KnowledgeGraph onNodeClick={handleNodeClick} />
                 </div>
-                <p className="text-xs mt-3 text-center" style={{ color: '#333330', fontFamily: 'DM Sans' }}>
+                <p className="text-xs mt-3 text-center" style={{ color: '#8ab4ba', fontFamily: 'DM Sans' }}>
                   Nodes represent topics · Lines indicate connections · Drag to rotate
                 </p>
               </motion.div>
@@ -164,10 +164,10 @@ export default function Dashboard() {
                 transition={{ duration: 0.35 }}
               >
                 <div className="mb-5">
-                  <h2 className="font-display font-semibold text-lg" style={{ color: '#f0ece4', fontFamily: 'Syne' }}>
+                  <h2 className="font-display font-semibold text-lg" style={{ color: '#0f1f22', fontFamily: 'Syne' }}>
                     Activity Overview
                   </h2>
-                  <p className="text-xs mt-0.5" style={{ color: '#555550', fontFamily: 'DM Sans' }}>
+                  <p className="text-xs mt-0.5" style={{ color: '#4a7a82', fontFamily: 'DM Sans' }}>
                     Your learning analytics for the past 7 days
                   </p>
                 </div>

@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --orange-primary: #ff6a00;
-  --orange-secondary: #ff8c42;
-  --bg-deep: #050505;
-  --bg-card: #111111;
-  --bg-card-hover: #161616;
-  --border-subtle: rgba(255,106,0,0.15);
-  --border-hover: rgba(255,106,0,0.5);
-  --text-primary: #f0ece4;
-  --text-secondary: #888880;
-  --text-muted: #444440;
+  --teal-primary: #0891b2;
+  --teal-secondary: #06b6d4;
+  --bg-deep: #eef9fb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0fbfc;
+  --border-subtle: rgba(8,145,178,0.15);
+  --border-hover: rgba(8,145,178,0.5);
+  --text-primary: #0f1f22;
+  --text-secondary: #4a7a82;
+  --text-muted: #8ab4ba;
 }
 
 * {
@@ -28,7 +28,8 @@ html, body, #root {
 }
 
 body {
-  background: var(--bg-deep);
+  background: radial-gradient(circle farthest-corner at 10% 20%, rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1%);
+  background-color: #eef9fb;
   color: var(--text-primary);
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -39,40 +40,40 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d0d0d;
+  background: #d4f0f4;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ff6a0055;
+  background: #0891b255;
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff6a00aa;
+  background: #0891b2aa;
 }
 
-/* Orange glow utility */
+/* Teal glow utility */
 .glow-orange {
-  box-shadow: 0 0 20px rgba(255,106,0,0.3), 0 0 60px rgba(255,106,0,0.1);
+  box-shadow: 0 0 20px rgba(8,145,178,0.25), 0 0 60px rgba(8,145,178,0.1);
 }
 .glow-orange-sm {
-  box-shadow: 0 0 10px rgba(255,106,0,0.25);
+  box-shadow: 0 0 10px rgba(8,145,178,0.2);
 }
 
 /* Glass effect */
 .glass {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.6);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(8,145,178,0.12);
 }
 
 .glass-orange {
-  background: rgba(255,106,0,0.05);
+  background: rgba(8,145,178,0.05);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,106,0,0.15);
+  border: 1px solid rgba(8,145,178,0.15);
 }
 
 /* Gradient text */
 .text-gradient-orange {
-  background: linear-gradient(135deg, #ff6a00, #ff8c42, #ffaa70);
+  background: linear-gradient(135deg, #0891b2, #06b6d4, #22d3ee);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -117,7 +118,7 @@ body {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--orange-primary);
+  background: var(--teal-primary);
   transition: width 0.3s ease;
 }
 .underline-anim:hover::after {

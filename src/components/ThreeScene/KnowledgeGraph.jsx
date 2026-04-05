@@ -51,7 +51,7 @@ export default function KnowledgeGraph({ onNodeClick }) {
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xff6a00, 1.5, 20);
+    const pointLight = new THREE.PointLight(0x0891b2, 1.5, 20);
     pointLight.position.set(2, 3, 4);
     scene.add(pointLight);
 
@@ -66,9 +66,9 @@ export default function KnowledgeGraph({ onNodeClick }) {
       ];
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
       const mat = new THREE.LineBasicMaterial({
-        color: 0xff6a00,
+        color: 0x0891b2,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.2,
         blending: THREE.AdditiveBlending,
       });
       scene.add(new THREE.Line(geo, mat));
@@ -83,7 +83,7 @@ export default function KnowledgeGraph({ onNodeClick }) {
       ctx.fillStyle = 'rgba(0,0,0,0)';
       ctx.clearRect(0, 0, 256, 64);
       ctx.font = 'bold 22px "DM Sans", sans-serif';
-      ctx.fillStyle = '#f0ece4';
+      ctx.fillStyle = '#0f1f22';
       ctx.textAlign = 'center';
       ctx.fillText(n.label, 128, 38);
       const texture = new THREE.CanvasTexture(cvs);
@@ -211,12 +211,12 @@ export default function KnowledgeGraph({ onNodeClick }) {
       {hoveredNode && (
         <div
           className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full font-mono text-sm pointer-events-none"
-          style={{ background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.4)', color: '#ff8c42' }}
+          style={{ background: 'rgba(8,145,178,0.12)', border: '1px solid rgba(8,145,178,0.4)', color: '#0891b2' }}
         >
           {hoveredNode}
         </div>
       )}
-      <div className="absolute top-3 right-3 font-mono text-xs" style={{ color: 'rgba(255,106,0,0.4)' }}>
+      <div className="absolute top-3 right-3 font-mono text-xs" style={{ color: 'rgba(8,145,178,0.5)' }}>
         drag to rotate · click to filter
       </div>
     </div>

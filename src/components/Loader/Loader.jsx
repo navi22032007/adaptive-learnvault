@@ -56,7 +56,7 @@ export default function Loader({ onComplete }) {
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const material = new THREE.PointsMaterial({
-      color: 0xff6a00,
+      color: 0x0891b2,
       size: 0.025,
       transparent: true,
       opacity: 0.8,
@@ -68,7 +68,7 @@ export default function Loader({ onComplete }) {
 
     // Connection lines (sparse)
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xff6a00,
+      color: 0x0891b2,
       transparent: true,
       opacity: 0.08,
       blending: THREE.AdditiveBlending,
@@ -158,7 +158,7 @@ export default function Loader({ onComplete }) {
           exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-          style={{ background: 'radial-gradient(ellipse at center, #0d0d0d 0%, #050505 100%)' }}
+          style={{ background: 'radial-gradient(circle farthest-corner at 10% 20%, rgba(234,249,249,0.9) 0.1%, rgba(239,249,251,0.95) 90.1%)', backgroundColor: '#eef9fb' }}
         >
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
@@ -170,18 +170,18 @@ export default function Loader({ onComplete }) {
               className="text-center"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(255,106,0,0.2)', border: '1px solid rgba(255,106,0,0.4)' }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(8,145,178,0.15)', border: '1px solid rgba(8,145,178,0.4)' }}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" stroke="#ff6a00" strokeWidth="1.5" fill="none"/>
-                    <circle cx="8" cy="8" r="2" fill="#ff6a00"/>
+                    <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" stroke="#0891b2" strokeWidth="1.5" fill="none"/>
+                    <circle cx="8" cy="8" r="2" fill="#0891b2"/>
                   </svg>
                 </div>
-                <span className="font-display text-sm font-semibold tracking-widest uppercase" style={{ color: 'rgba(255,106,0,0.8)', letterSpacing: '0.2em' }}>
+                <span className="font-display text-sm font-semibold tracking-widest uppercase" style={{ color: 'rgba(8,145,178,0.9)', letterSpacing: '0.2em' }}>
                   LearnVault
                 </span>
               </div>
 
-              <h1 className="font-display text-4xl font-bold text-white mb-2">
+              <h1 className="font-display text-4xl font-bold mb-2" style={{ color: '#0f1f22' }}>
                 Analyzing Learning
                 <br />
                 <span className="text-gradient-orange">Patterns…</span>
@@ -195,13 +195,13 @@ export default function Loader({ onComplete }) {
               className="w-64"
             >
               <div className="flex justify-between mb-2">
-                <span className="font-mono text-xs" style={{ color: 'rgba(255,106,0,0.6)' }}>Initializing AI engine</span>
-                <span className="font-mono text-xs" style={{ color: 'rgba(255,106,0,0.8)' }}>{progress}%</span>
+                <span className="font-mono text-xs" style={{ color: 'rgba(8,145,178,0.7)' }}>Initializing AI engine</span>
+                <span className="font-mono text-xs" style={{ color: 'rgba(8,145,178,0.9)' }}>{progress}%</span>
               </div>
-              <div className="h-px w-full rounded-full" style={{ background: 'rgba(255,106,0,0.15)' }}>
+              <div className="h-px w-full rounded-full" style={{ background: 'rgba(8,145,178,0.15)' }}>
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(90deg, #ff6a00, #ff8c42)', boxShadow: '0 0 8px rgba(255,106,0,0.6)' }}
+                  style={{ background: 'linear-gradient(90deg, #0891b2, #06b6d4)', boxShadow: '0 0 8px rgba(8,145,178,0.5)' }}
                   initial={{ width: '0%' }}
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.2 }}
@@ -214,7 +214,7 @@ export default function Loader({ onComplete }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: progress > (i + 1) * 25 ? 1 : 0.2 }}
                     className="font-mono text-xs px-2 py-1 rounded"
-                    style={{ background: 'rgba(255,106,0,0.08)', color: '#ff8c42', border: '1px solid rgba(255,106,0,0.15)' }}
+                    style={{ background: 'rgba(8,145,178,0.08)', color: '#0891b2', border: '1px solid rgba(8,145,178,0.2)' }}
                   >
                     {msg}
                   </motion.span>

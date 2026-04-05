@@ -22,7 +22,7 @@ export default function NeuralBackground() {
     const nodeCount = 60;
     const nodePositions = [];
     const nodeGeometry = new THREE.SphereGeometry(0.04, 8, 8);
-    const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0xff6a00 });
+    const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0x0891b2 });
 
     const instancedMesh = new THREE.InstancedMesh(nodeGeometry, nodeMaterial, nodeCount);
     const dummy = new THREE.Object3D();
@@ -58,9 +58,9 @@ export default function NeuralBackground() {
     const lineGeo = new THREE.BufferGeometry();
     lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePositions), 3));
     const lineMat = new THREE.LineBasicMaterial({
-      color: 0xff6a00,
+      color: 0x0891b2,
       transparent: true,
-      opacity: 0.06,
+      opacity: 0.12,
       blending: THREE.AdditiveBlending,
     });
     const lines = new THREE.LineSegments(lineGeo, lineMat);
@@ -77,10 +77,10 @@ export default function NeuralBackground() {
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
     const pMat = new THREE.PointsMaterial({
-      color: 0xff8c42,
+      color: 0x06b6d4,
       size: 0.015,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.25,
       blending: THREE.AdditiveBlending,
     });
     const particles = new THREE.Points(pGeo, pMat);
@@ -126,7 +126,7 @@ export default function NeuralBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.7 }}
+      style={{ opacity: 0.4 }}
     />
   );
 }
