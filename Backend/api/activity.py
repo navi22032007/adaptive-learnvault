@@ -1,49 +1,42 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from ..core.database import get_session
-from ..models.domain import UserActivity, User
-from ..models.schemas import ActivityDataSchema
+from fastapi import APIRouter, Depends
+from core.database import get_db
 from .auth import get_current_user
-import json
+from models.domain import User, UserActivity
+from motor.motor_asyncio import AsyncIOMotorDatabase
+from datetime import datetime
 
 router = APIRouter(prefix="/activity", tags=["activity"])
 
-@router.get("/", response_model=ActivityDataSchema)
-def read_activity(
-    session: Session = Depends(get_session),
-    current_user: User = Depends(get_current_user)
+@router.get("/", response_model=UserActivity)
+async def get_user_activity(
+    user: User = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_db)
 ):
-    activity = session.exec(select(UserActivity).where(UserActivity.user_id == current_user.id)).first()
-    if not activity:
-        # Return default if not found
-        return ActivityDataSchema(
-            weeklyHours=[0, 0, 0, 0, 0, 0, 0],
-            completionRate=0,
-            streak=current_user.streak,
-            totalCompleted=0,
-            currentLevel=current_user.level,
-            xp=0,
-            nextLevelXp=1000,
-            weekLabels=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        )
-    
-    # Parse JSON hours
-    try:
-        hours_dict = json.loads(activity.weekly_hours_json)
-        # Defaulting to standard week labels
-        labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        hours = [hours_dict.get(label, 0.0) for label in labels]
-    except Exception:
-        hours = [0, 0, 0, 0, 0, 0, 0]
-        labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    activity_dict = await db["activities"].find_one({"user_email": user.email})
+    if not activity_dict:
+        # Create empty activity if not exists
+        activity = UserActivity(user_email=user.email)
+        activity_dict = activity.model_dump(by_alias=True)
+        if "_id" in activity_dict and activity_dict["_id"] is None:
+            del activity_dict["_id"]
+        await db["activities"].insert_one(activity_dict)
+        return activity
+        
+    return UserActivity(**activity_dict)
 
-    return ActivityDataSchema(
-        weeklyHours=hours,
-        completionRate=activity.completion_rate,
-        streak=current_user.streak,
-        totalCompleted=activity.total_completed,
-        currentLevel=current_user.level,
-        xp=activity.xp,
-        nextLevelXp=activity.next_level_xp,
-        weekLabels=labels
+@router.post("/record")
+async def record_activity(
+    duration_minutes: float,
+    day_label: str, # "Mon", "Tue", etc.
+    user: User = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    await db["activities"].update_one(
+        {"user_email": user.email},
+        {
+            "$inc": {f"weekly_hours.{day_label}": duration_minutes / 60.0},
+            "$set": {"last_updated": datetime.utcnow()}
+        },
+        upsert=True
     )
+    return {"message": "Activity recorded"}

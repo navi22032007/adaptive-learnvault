@@ -1,19 +1,20 @@
-from typing import List, Dict, Any
 from fastapi import APIRouter, Depends
-from sqlmodel import Session, select
-from ..core.database import get_session
-from ..models.domain import GraphNode, GraphEdge
+from typing import List, Dict
+from core.database import get_db
+from models.domain import GraphNode, GraphEdge
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
-router = APIRouter(prefix="/knowledge-graph", tags=["knowledge-graph"])
+router = APIRouter(prefix="/graph", tags=["graph"])
 
-@router.get("/", response_model=Dict[str, Any])
-def read_graph(session: Session = Depends(get_session)):
-    nodes = session.exec(select(GraphNode)).all()
-    edges_records = session.exec(select(GraphEdge)).all()
+@router.get("/data")
+async def get_graph_data(db: AsyncIOMotorDatabase = Depends(get_db)):
+    nodes_cursor = db["graph_nodes"].find({})
+    edges_cursor = db["graph_edges"].find({})
     
-    formatted_edges = [[edge.source, edge.target] for edge in edges_records]
+    nodes = await nodes_cursor.to_list(length=1000)
+    edges = await edges_cursor.to_list(length=1000)
     
     return {
-        "nodes": nodes,
-        "edges": formatted_edges
+        "nodes": [GraphNode(**n) for n in nodes],
+        "edges": [GraphEdge(**e) for e in edges]
     }

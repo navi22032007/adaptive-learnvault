@@ -11,3 +11,6 @@ passlib[bcrypt]
 pyjwt
 google-generativeai
 python-dotenv
+motor
+dnspython
+

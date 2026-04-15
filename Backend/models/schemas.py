@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 class RecommendationSchema(BaseModel):
-    id: int
+    id: str
     title: str
     type: str
     difficulty: int
@@ -23,11 +23,11 @@ class ActivityDataSchema(BaseModel):
     totalCompleted: int
     currentLevel: str
     xp: int
-    nextLevelXp: int
+    next_level_xp: int
     weekLabels: List[str]
 
 class UserProfileSchema(BaseModel):
-    id: int
+    id: str
     name: str
     avatar: Optional[str]
     level: str
@@ -46,3 +46,16 @@ class UserCreate(BaseModel):
     name: str
     email: str
     password: str
+
+class ImportSchema(BaseModel):
+    url: str
+    title: Optional[str] = None
+    type: Optional[str] = None
+
+class ExplainRequest(BaseModel):
+    topic: str
+
+class WhatNextSuggestion(BaseModel):
+    title: str
+    reason: str
+    relevance: int

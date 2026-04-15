@@ -68,6 +68,17 @@ export default function Login() {
           >
             Sign In
           </button>
+          
+          <button
+            type="button"
+            onClick={async () => {
+              const success = await useStore.getState().bypassLogin();
+              if (success) navigate('/dashboard');
+            }}
+            className="w-full py-2.5 mt-2 rounded-xl bg-white/5 border border-white/10 text-white/60 text-xs font-mono uppercase tracking-widest hover:text-white hover:bg-white/10 transition-all"
+          >
+            Bypass for Flow Testing
+          </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-text-secondary">

@@ -7,6 +7,7 @@ import KnowledgeGraph from '../components/ThreeScene/KnowledgeGraph';
 import ContentView from './ContentView';
 import AIResourceGenerator from '../components/Dashboard/AIResourceGenerator';
 import ImportContentModal from '../components/Dashboard/ImportContentModal';
+import PathfinderPanel from '../components/Dashboard/PathfinderPanel';
 import { useStore } from '../store';
 
 export default function Dashboard() {
@@ -67,12 +68,28 @@ export default function Dashboard() {
                 {recommendations.length} curated resources based on your trajectory
               </p>
             </div>
-            <button
-              onClick={() => setIsImportOpen(true)}
-              className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-bold hover:bg-white/10 transition-all flex items-center gap-2"
-            >
-              <span>+</span> Import Content
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setIsImportOpen(true)}
+                className="px-5 py-2.5 rounded-xl bg-orange-primary/10 border border-orange-primary/20 text-orange-primary text-sm font-bold hover:bg-orange-primary/20 transition-all flex items-center gap-2"
+              >
+                <span>+</span> Import Link
+              </button>
+              
+              <label className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-bold hover:bg-white/10 transition-all cursor-pointer flex items-center gap-2">
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      await useStore.getState().uploadFile(file);
+                    }
+                  }}
+                />
+                <span>↑</span> Upload local
+              </label>
+            </div>
           </div>
 
           {activeSection === 'recommendations' && (
@@ -82,6 +99,7 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               className="flex flex-col gap-6"
             >
+              <PathfinderPanel />
               <AIResourceGenerator />
               
               {filterTag && (

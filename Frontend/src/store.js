@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export const useStore = create((set, get) => ({
   isLoading: true,
@@ -10,6 +10,7 @@ export const useStore = create((set, get) => ({
   activityData: null,
   knowledgeGraph: { nodes: [], edges: [] },
   userProfile: null,
+  aiSuggestions: [],
   token: localStorage.getItem('token') || null,
 
   setLoading: (val) => set({ isLoading: val }),
@@ -65,6 +66,13 @@ export const useStore = create((set, get) => ({
   logout: () => {
     localStorage.removeItem('token');
     set({ token: null, userProfile: null, recommendations: [], activityData: null });
+  },
+
+  bypassLogin: async () => {
+    localStorage.setItem('token', 'dummy');
+    set({ token: 'dummy' });
+    await get().fetchAllData();
+    return true;
   },
 
   fetchAllData: async () => {
@@ -163,5 +171,59 @@ export const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Failed to update progress:", error);
     }
+  },
+
+  uploadFile: async (file) => {
+    const { token } = get();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/content/upload`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      if (res.ok) {
+        const newItem = await res.json();
+        set(state => ({ recommendations: [newItem, ...state.recommendations] }));
+        return true;
+      }
+    } catch (e) {
+      console.error("Upload failed:", e);
+    }
+    return false;
+  },
+
+  getWhatNext: async () => {
+    const { token } = get();
+    try {
+      const res = await fetch(`${API_BASE_URL}/recommendations/what-next`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const aiSuggestions = await res.json();
+        set({ aiSuggestions });
+      }
+    } catch (e) { console.error("What Next failed:", e); }
+  },
+
+  explainTopic: async (topic) => {
+    const { token } = get();
+    try {
+      const res = await fetch(`${API_BASE_URL}/recommendations/explain`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ topic })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.explanation;
+      }
+    } catch (e) { console.error("Explanation failed:", e); }
+    return "Failed to fetch explanation.";
   },
 }));

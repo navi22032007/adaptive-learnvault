@@ -5,8 +5,10 @@ import { useStore } from '../store';
 const difficultyLabel = ['', 'Beginner', 'Elementary', 'Intermediate', 'Advanced', 'Expert'];
 
 export default function ContentView({ item, onClose }) {
-  const { updateProgress } = useStore();
+  const { updateProgress, explainTopic } = useStore();
   const [progress, setProgress] = useState(item.progress || 0);
+  const [explanation, setExplanation] = useState(null);
+  const [isExplaining, setIsExplaining] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [tab, setTab] = useState('overview');
@@ -35,6 +37,13 @@ export default function ContentView({ item, onClose }) {
   const handleClose = () => {
     updateProgress(item.id, Math.round(progress));
     onClose();
+  };
+
+  const handleExplain = async () => {
+    setIsExplaining(true);
+    const text = await explainTopic(item.title);
+    setExplanation(text);
+    setIsExplaining(false);
   };
 
   const formatTime = (seconds) => {
@@ -137,6 +146,30 @@ export default function ContentView({ item, onClose }) {
                 {tab === 'overview' && (
                   <div className="space-y-4">
                     <p className="text-sm text-text-secondary leading-relaxed">{item.description}</p>
+                    
+                    <div className="p-4 rounded-2xl bg-orange-primary/5 border border-orange-primary/10 relative overflow-hidden group">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-mono text-orange-primary uppercase font-bold">Concept Clarity</span>
+                        <button 
+                          onClick={handleExplain}
+                          disabled={isExplaining}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-primary text-white text-[10px] font-bold hover:bg-orange-secondary transition-all disabled:opacity-50"
+                        >
+                          {isExplaining ? 'Thinking...' : '✨ Explain Logic'}
+                        </button>
+                      </div>
+                      
+                      {explanation ? (
+                        <div className="text-xs text-white leading-relaxed whitespace-pre-wrap animate-in fade-in slide-in-from-top-2 duration-500">
+                          {explanation}
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-text-secondary italic">
+                          Struggling with this topic? Let AI provide a level-appropriate breakdown.
+                        </p>
+                      )}
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
                       <div>
                         <div className="text-[10px] font-mono text-orange-primary uppercase mb-1">Difficulty</div>
