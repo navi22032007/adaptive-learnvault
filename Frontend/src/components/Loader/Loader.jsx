@@ -122,17 +122,17 @@ export default function Loader({ onComplete }) {
     };
     animate();
 
-    // Progress simulation
+    // Progress simulation — fast intro (under 1 second)
     let prog = 0;
     const interval = setInterval(() => {
-      prog += Math.random() * 8 + 2;
+      prog += Math.random() * 20 + 10;
       if (prog >= 100) {
         prog = 100;
         clearInterval(interval);
-        setTimeout(() => setPhase(1), 500);
+        setTimeout(() => setPhase(1), 200);
       }
       setProgress(Math.floor(prog));
-    }, 120);
+    }, 60);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -145,7 +145,7 @@ export default function Loader({ onComplete }) {
 
   useEffect(() => {
     if (phase === 1) {
-      setTimeout(() => onComplete?.(), 1000);
+      setTimeout(() => onComplete?.(), 400);
     }
   }, [phase]);
 

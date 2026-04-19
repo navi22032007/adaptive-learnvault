@@ -80,9 +80,15 @@ export default function Navbar() {
       <div className="flex items-center gap-3">
         {token && userProfile ? (
           <>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(8,145,178,0.08)', border: '1px solid rgba(8,145,178,0.2)' }}>
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-              <span className="font-mono text-xs" style={{ color: '#0891b2' }}>{userProfile.streak} day streak</span>
+            <div className="flex items-center gap-3 px-3 py-1.5 rounded-full" style={{ background: 'rgba(8,145,178,0.08)', border: '1px solid rgba(8,145,178,0.2)' }}>
+              <div className="flex items-center gap-1.5 border-r border-cyan-800/20 pr-3">
+                 <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                 <span className="font-mono text-xs" style={{ color: '#0891b2' }}>{(userProfile?.streak || 0)} day streak</span>
+              </div>
+              <div className="flex items-center gap-2 pl-1">
+                 <span className="text-[10px] font-black uppercase tracking-widest text-orange-primary bg-orange-primary/10 px-2 py-0.5 rounded-md">Lvl {userProfile?.level || 1}</span>
+                 <span className="font-mono text-xs text-text-secondary">{(userProfile?.xp || 0).toLocaleString()} XP</span>
+              </div>
             </div>
             <button 
               onClick={handleLogout}
@@ -94,7 +100,7 @@ export default function Navbar() {
               className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
               style={{ background: 'linear-gradient(135deg, #0891b2, #06b6d4)', color: '#fff' }}
             >
-              {userProfile.name[0]}
+              {userProfile?.name?.[0] || 'U'}
             </div>
           </>
         ) : (

@@ -34,27 +34,33 @@ export default function KnowledgeGraph({ onNodeClick }) {
     // Create Nodes
     const nodeMeshes = [];
     nodes.forEach((node) => {
-      const geometry = new THREE.SphereGeometry(node.size * 0.15, 32, 32);
+      // Fallback random coordinates if not seeded
+      const x = node.x !== undefined ? node.x : (Math.random() - 0.5) * 5;
+      const y = node.y !== undefined ? node.y : (Math.random() - 0.5) * 5;
+      const z = node.z !== undefined ? node.z : (Math.random() - 0.5) * 5;
+      const size = node.size || 1.0;
+      
+      const geometry = new THREE.SphereGeometry(size * 0.15, 32, 32);
       const material = new THREE.MeshBasicMaterial({ 
-        color: new THREE.Color(node.color),
+        color: new THREE.Color(node.color || '#374151'),
         transparent: true,
         opacity: 0.9 
       });
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(node.x, node.y, node.z);
+      mesh.position.set(x, y, z);
       mesh.userData = { id: node.id, label: node.label };
       group.add(mesh);
       nodeMeshes.push(mesh);
 
       // Add Glow
-      const glowGeo = new THREE.SphereGeometry(node.size * 0.25, 32, 32);
+      const glowGeo = new THREE.SphereGeometry(size * 0.25, 32, 32);
       const glowMat = new THREE.MeshBasicMaterial({ 
-        color: new THREE.Color(node.color),
+        color: new THREE.Color(node.color || '#374151'),
         transparent: true,
         opacity: 0.1 
       });
       const glowMesh = new THREE.Mesh(glowGeo, glowMat);
-      glowMesh.position.set(node.x, node.y, node.z);
+      glowMesh.position.set(x, y, z);
       group.add(glowMesh);
     });
 
@@ -83,9 +89,7 @@ export default function KnowledgeGraph({ onNodeClick }) {
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
       
-      if (!isDragging.current) {
-        rotationRef.current.y += 0.002;
-      }
+      // Auto-rotation removed to keep the graph stable
       
       group.rotation.x = rotationRef.current.x;
       group.rotation.y = rotationRef.current.y;

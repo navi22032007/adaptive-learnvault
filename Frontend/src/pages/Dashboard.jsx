@@ -4,11 +4,31 @@ import Sidebar from '../components/Dashboard/Sidebar';
 import ActivityPanel from '../components/Dashboard/ActivityPanel';
 import RecommendationCard from '../components/RecommendationCard/RecommendationCard';
 import KnowledgeGraph from '../components/ThreeScene/KnowledgeGraph';
-import ContentView from './ContentView';
 import AIResourceGenerator from '../components/Dashboard/AIResourceGenerator';
 import ImportContentModal from '../components/Dashboard/ImportContentModal';
 import PathfinderPanel from '../components/Dashboard/PathfinderPanel';
 import { useStore } from '../store';
+
+// ─── Skeleton Card (shown while recommendations load) ───
+function SkeletonCard() {
+  return (
+    <div className="p-5 rounded-2xl bg-card border border-white/5 animate-pulse">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-white/5" />
+        <div className="flex-1">
+          <div className="h-4 bg-white/5 rounded w-3/4 mb-2" />
+          <div className="h-3 bg-white/5 rounded w-1/2" />
+        </div>
+      </div>
+      <div className="h-3 bg-white/5 rounded w-full mb-2" />
+      <div className="h-3 bg-white/5 rounded w-2/3 mb-4" />
+      <div className="flex gap-2">
+        <div className="h-5 bg-white/5 rounded-full w-14" />
+        <div className="h-5 bg-white/5 rounded-full w-14" />
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const { 
@@ -16,11 +36,12 @@ export default function Dashboard() {
     userProfile, 
     fetchAllData, 
     isLoading,
-    token
+    initialLoadDone,
+    token,
+    setSelectedContent
   } = useStore();
   
   const [activeSection, setActiveSection] = useState('recommendations');
-  const [selectedItem, setSelectedItem] = useState(null);
   const [filterTag, setFilterTag] = useState(null);
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -29,7 +50,7 @@ export default function Dashboard() {
   }, [token, fetchAllData]);
 
   const filtered = filterTag
-    ? recommendations.filter((r) => r.tags.includes(filterTag.toLowerCase()))
+    ? recommendations.filter((r) => r.tags?.includes(filterTag.toLowerCase()))
     : recommendations;
 
   const handleNodeClick = (nodeId) => {
@@ -37,17 +58,7 @@ export default function Dashboard() {
     setActiveSection('recommendations');
   };
 
-  if (isLoading && recommendations.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-deep">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-orange-primary/20 border-t-orange-primary rounded-full animate-spin" />
-          <div className="text-orange-primary font-mono animate-pulse tracking-widest text-sm uppercase">Initializing AI Engine...</div>
-        </div>
-      </div>
-    );
-  }
-
+  // ─── Always show the dashboard shell, never a full-screen blocker ───
   return (
     <div className="min-h-screen pt-20 pb-10 px-6 bg-deep">
       <div className="max-w-7xl mx-auto flex gap-8 h-[calc(100vh-120px)]">
@@ -65,7 +76,12 @@ export default function Dashboard() {
                 Welcome, {userProfile?.name || 'Explorer'}
               </h1>
               <p className="text-text-secondary text-sm mt-1">
-                {recommendations.length} curated resources based on your trajectory
+                {recommendations.length > 0
+                  ? `${recommendations.length} curated resources based on your trajectory`
+                  : isLoading
+                    ? 'Loading your personalized recommendations…'
+                    : 'No resources yet — import or generate some!'
+                }
               </p>
             </div>
             <div className="flex gap-3">
@@ -112,15 +128,25 @@ export default function Dashboard() {
                 </div>
               )}
 
+              {/* Show skeleton cards while loading, real cards when ready */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filtered.map((item, i) => (
-                  <RecommendationCard
-                    key={item.id}
-                    item={item}
-                    index={i}
-                    onClick={() => setSelectedItem(item)}
-                  />
-                ))}
+                {isLoading && recommendations.length === 0 ? (
+                  <>
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                  </>
+                ) : (
+                  filtered.map((item, i) => (
+                    <RecommendationCard
+                      key={item.id}
+                      item={item}
+                      index={i}
+                      onClick={() => setSelectedContent(item)}
+                    />
+                  ))
+                )}
               </div>
             </motion.div>
           )}
@@ -150,9 +176,6 @@ export default function Dashboard() {
 
       {/* Modals */}
       <AnimatePresence>
-        {selectedItem && (
-          <ContentView item={selectedItem} onClose={() => setSelectedItem(null)} />
-        )}
         <ImportContentModal isOpen={isImportOpen} onClose={() => setIsImportOpen(false)} />
       </AnimatePresence>
     </div>

@@ -30,6 +30,7 @@ class User(MongoBaseModel):
     streak: int = 0
     todayGoal: int = 60
     todayProgress: int = 0
+    last_active_date: Optional[str] = None # YYYY-MM-DD
     role_name: str = "Student"
 
 class Topic(MongoBaseModel):
@@ -78,7 +79,17 @@ class UserContentStatus(MongoBaseModel):
     liked: Optional[bool] = None
     bookmarked: bool = False
     progress: int = 0
+    ai_explanation: Optional[str] = None
     last_accessed: datetime = Field(default_factory=datetime.utcnow)
+
+class LessonPlan(BaseModel):
+    items: List[Dict[str, Any]] # e.g. [{"title": "Basics", "content": "..."}]
+
+class Note(MongoBaseModel):
+    user_email: str
+    content_id: str
+    text: str
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class GraphNode(MongoBaseModel):
     node_id: str

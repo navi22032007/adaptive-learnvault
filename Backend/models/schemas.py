@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 
 class RecommendationSchema(BaseModel):
@@ -15,6 +15,7 @@ class RecommendationSchema(BaseModel):
     instructor: str
     rating: float
     enrolled: int
+    ai_explanation: Optional[str] = None
 
 class ActivityDataSchema(BaseModel):
     weeklyHours: List[float]
@@ -23,7 +24,7 @@ class ActivityDataSchema(BaseModel):
     totalCompleted: int
     currentLevel: str
     xp: int
-    next_level_xp: int
+    nextLevelXp: int
     weekLabels: List[str]
 
 class UserProfileSchema(BaseModel):
@@ -34,6 +35,8 @@ class UserProfileSchema(BaseModel):
     streak: int
     todayGoal: int
     todayProgress: int
+    xp: Optional[int] = 0
+    nextLevelXp: Optional[int] = 1000
 
 class Token(BaseModel):
     access_token: str
@@ -54,8 +57,56 @@ class ImportSchema(BaseModel):
 
 class ExplainRequest(BaseModel):
     topic: str
+    metadata: Optional[Dict[str, Any]] = None
 
 class WhatNextSuggestion(BaseModel):
     title: str
     reason: str
     relevance: int
+
+class GenerateRequest(BaseModel):
+    topic: str
+    level: Optional[str] = "Beginner"
+
+class NoteSchema(BaseModel):
+    content_id: str
+    text: str
+
+class NoteResponse(BaseModel):
+    text: str
+
+class GraphNode(BaseModel):
+    id: str
+    label: str
+    type: str # topic, content
+    color: str
+
+class GraphEdge(BaseModel):
+    from_node: str # mapped from 'from' in code
+    to: str
+    label: str
+
+class GraphResponse(BaseModel):
+    nodes: List[Dict[str, Any]]
+    edges: List[Dict[str, Any]]
+
+class ChatMessageSchema(BaseModel):
+    role: str
+    content: str
+    options: Optional[List[str]] = None
+
+class ChatSessionSchema(BaseModel):
+    id: str
+    title: str
+    messages: List[ChatMessageSchema]
+
+class AgentChatRequest(BaseModel):
+    session_id: Optional[str] = None
+    message: str
+
+class CompletionResponse(BaseModel):
+    success: bool
+    xp_gained: int
+    total_xp: int
+    new_level: str
+    nextLevelXp: int

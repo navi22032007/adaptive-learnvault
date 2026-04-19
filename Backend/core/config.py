@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     MONGODB_URL: str = "mongodb://localhost:27017"
     DATABASE_NAME: str = "learnvault"
-
+    YOUTUBE_API_KEY: Optional[str] = None
+    NVIDIA_API_KEY: Optional[str] = None
 
     model_config = {
         "env_file": ".env",
