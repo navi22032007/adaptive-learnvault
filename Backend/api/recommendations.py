@@ -425,7 +425,7 @@ async def search_youtube_recommendations(
     db: AsyncIOMotorDatabase = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    api_key = settings.YOUTUBE_API_KEY or "AIzaSyDqjiX02HzQXfCnJwoF5qq6jL05MyqNLfI"
+    api_key = settings.YOUTUBE_API_KEY
     if not api_key:
         return []
 
