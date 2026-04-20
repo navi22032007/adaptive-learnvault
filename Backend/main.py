@@ -10,13 +10,18 @@ app = FastAPI(title="Adaptive LearnVault API")
 
 @app.on_event("startup")
 async def startup_event():
-    # Placeholder for legitimate startup tasks
-    pass
+    # Ping to confirm a successful connection
+    try:
+        from core.database import client
+        await client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+    except Exception as e:
+        print(f"MongoDB connection failed: {e}")
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"],
+    allow_origins=["*"], # In production, you might want to specify the Vercel URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
